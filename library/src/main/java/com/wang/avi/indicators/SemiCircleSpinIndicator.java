@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class SemiCircleSpinIndicator extends Indicator {
 
     private float degress;
-
+    private float arcWidth;
     @Override
     public void draw(Canvas canvas, Paint paint) {
         canvas.rotate(degress,centerX(),centerY());
@@ -27,8 +27,8 @@ public class SemiCircleSpinIndicator extends Indicator {
             canvas.rotate(12,centerX(),centerY());
             RectF rectF=new RectF(0,0,getWidth(),getHeight());
             paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(6);
-            canvas.drawArc(rectF,0,6,false,paint);
+            paint.setStrokeWidth(4);
+            canvas.drawArc(rectF,0,arcWidth,false,paint);
         }
     }
 
@@ -47,6 +47,20 @@ public class SemiCircleSpinIndicator extends Indicator {
         rotateAnim.setDuration(10000);
         rotateAnim.setRepeatCount(-1);
         animators.add(rotateAnim);
+        ValueAnimator arcAnim=ValueAnimator.ofFloat(0,12,0);
+        arcAnim.setInterpolator(new LinearInterpolator());
+        arcAnim.setDuration(3000);
+        arcAnim.setRepeatCount(-1);
+        addUpdateListener(arcAnim,new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                arcWidth= (float) animation.getAnimatedValue();
+                postInvalidate();
+            }
+        });
+        animators.add(arcAnim);
+
+
         return animators;
     }
 
