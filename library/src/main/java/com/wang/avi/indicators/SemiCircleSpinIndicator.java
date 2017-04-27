@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
+import android.view.animation.LinearInterpolator;
 import com.wang.avi.Indicator;
 
 import java.util.ArrayList;
@@ -19,8 +20,16 @@ public class SemiCircleSpinIndicator extends Indicator {
     @Override
     public void draw(Canvas canvas, Paint paint) {
         canvas.rotate(degress,centerX(),centerY());
-        RectF rectF=new RectF(0,0,getWidth(),getHeight());
-        canvas.drawArc(rectF,-60,120,false,paint);
+        //canvas.drawArc(rectF,-60,30,false,paint);
+
+        float circleSpacing=4;
+        for (int i = 0 ; i < 30 ; i ++) {
+            canvas.rotate(12,centerX(),centerY());
+            RectF rectF=new RectF(0,0,getWidth(),getHeight());
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setStrokeWidth(6);
+            canvas.drawArc(rectF,0,6,false,paint);
+        }
     }
 
     @Override
@@ -34,7 +43,8 @@ public class SemiCircleSpinIndicator extends Indicator {
                 postInvalidate();
             }
         });
-        rotateAnim.setDuration(600);
+        rotateAnim.setInterpolator(new LinearInterpolator());
+        rotateAnim.setDuration(10000);
         rotateAnim.setRepeatCount(-1);
         animators.add(rotateAnim);
         return animators;
